@@ -47,6 +47,12 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+Note: you'll also need to have an instance of redis running.. simple way is just running a docker container.
+
+```
+docker run --name redis-session-demo -p 127.0.0.1:6379:6379/tcp -d redis
+```
+
 ## Test
 
 ```bash
