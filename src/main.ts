@@ -6,7 +6,6 @@ import * as session from 'express-session'
 import * as connectRedis from 'connect-redis'
 //
 import { AppModule } from './app.module'
-//
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -15,9 +14,10 @@ async function bootstrap() {
       credentials: true,
     },
   })
+  
   const RedisStore = connectRedis(session)
   const redisClient = createClient()
-  // app.set('trust proxy', 1) // trust first proxy
+  
   app.use(
     session({
       name: 'connect.sid',
@@ -25,16 +25,18 @@ async function bootstrap() {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: false, // fix
-        httpOnly: false, // fix
+        secure: false, // change in prod
+        httpOnly: false, // change in prod
         // sameSite: 'lax',
         maxAge: 1000 * 60 * 60 * 30 * 24,
       },
       store: new RedisStore({ client: redisClient }),
     })
   )
+  
   app.use(passport.initialize())
   app.use(passport.session())
+  
   await app.listen(5000)
 }
 
